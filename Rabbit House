@@ -1,0 +1,118 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+#define night_rider ios::sync_with_stdio(false);cin.tie(NULL);
+#define double long double
+#define int long long int
+#define en "\n"
+#define fi first
+#define se second
+#define PB push_back
+#define all(v) v.begin(),v.end()
+#define allr(v) v.rbegin(),v.rend()
+#define rep(i,x,y) for(int i=x ; i<y ; i++)
+#define erep(i,x,y) for(int i=x ; i<=y ; i++)
+#define erepr(i,x,y) for(int i=x ; i>=y ; i--)
+#define repr(i,x,y) for(int i=x ; i>y ; i--)
+
+typedef vector<int> vi;
+typedef vector<vector<int>> vii;
+typedef pair<int,int> pi;
+typedef vector<pair<int,int>> pii;
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+const int no=3e6+5,modulo=1e9+7,inf=1e18,N=310;
+//int ar[no] ,br[no],cr[no];//,dr[no],er[no];
+int mat[N][N];
+//int used[no];
+//int color[no];
+//pii adj[no];
+//vi adj[no] , ans[no];
+//LOWER_BOUND(n) - FIRST ELEMENT GREATER THAN EQUAL TO n
+//UPPER_BOUND(n) - FIRST ELEMENT GREATER THAN n
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------                                                                        
+int ans=0;
+
+int dx[]={-1,0,1,0};
+int dy[]={0,-1,0,1};
+
+int used[N][N];
+
+void make(int n, int m) {	
+	rep(i,1,n+1) rep(j,1,m+1) used[i][j]=0;
+}
+
+bool ck(int x, int y, int n, int m) {
+	if(x>=1 && x<=n && y>=1 && y<=m && !used[x][y]) return 1;
+	return 0;
+}
+
+priority_queue<pair<int,pi>> q;
+
+void bfs(int x , int y, int n, int m) {
+	used[x][y]=1;
+	while(!q.empty()) {
+		int curx=q.top().se.fi;
+		int cury=q.top().se.se;
+		int val = mat[curx][cury];
+		// cout<<curx<<" "<<cury<<en;
+		q.pop();
+		rep(i,0,4) {
+			if(ck(curx+dx[i],cury+dy[i],n,m)) {
+				used[curx+dx[i]][cury+dy[i]]=1;
+				int p=max(val-1,mat[curx+dx[i]][cury+dy[i]]) ;
+				ans+=max(p-mat[curx+dx[i]][cury+dy[i]],(int)0);
+				mat[curx+dx[i]][cury+dy[i]]=p;
+				q.push({mat[curx+dx[i]][cury+dy[i]],{curx+dx[i],cury+dy[i]}});
+			}
+		}
+	}
+}
+
+void solve () {
+    int n=0,m=0,a=0,b=0,c=0,d=0,x=0,y=0,z=0,k=0;
+    cin>>n>>m;
+    rep(i,1,n+1) {
+    	rep(j,1,m+1) {
+    		cin>>mat[i][j];
+    		q.push({mat[i][j],{i,j}});
+    	}
+    }
+    ans=0;
+    make(n,m);
+    bfs(x,y,n,m);
+    // rep(i,1,n+1) {
+    // 	rep(j,1,m+1) {
+    // 		if(mat[i][j]-1>mat[i-1][j] || mat[i][j]-1>mat[i][j-1] || mat[i][j]-1>mat[i+1][j] || mat[i][j]-1>mat[i][j+1]){
+    // 			bfs(i,j,n,m);
+    // 			make(n,m);
+    // 		}
+    // 	}
+    // }	
+    cout<<ans<<en;
+    // rep(i,1,n+1) {rep(j,1,m+1) cout<<mat[i][j]<<" ";
+    // cout<<en;}
+}
+
+inline void runn() {
+	#ifndef ONLINE_JUDGE
+	freopen("input.txt","r",stdin);      
+	freopen("output.txt","w",stdout);	
+	#endif
+}
+
+signed main()
+{
+	night_rider
+	//runn();
+	int t=1;
+	cout<<fixed<<setprecision(15);
+   	cin>>t;
+	rep(i,1,t+1) {
+         cout << "Case #" << i << ": ";
+        solve();
+    }
+}
